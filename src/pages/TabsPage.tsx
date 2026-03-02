@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Tab } from '../types/Tab';
 
 interface TabsPageProps {
@@ -8,24 +8,12 @@ interface TabsPageProps {
 }
 
 export const TabsPage: React.FC<TabsPageProps> = ({ tabs }) => {
-  const location = useLocation();
-  const params = useParams();
+  const params = useParams<{ tabId?: string }>();
 
-  const getActiveTabId = (): string | null => {
-    if (params.tabId && tabs.some(tab => tab.id === params.tabId)) {
-      return params.tabId;
-    }
-
-    for (const tab of tabs) {
-      if (location.pathname.endsWith(`/${tab.id}`)) {
-        return tab.id;
-      }
-    }
-
-    return null;
-  };
-
-  const activeTabId = getActiveTabId();
+  const activeTabId =
+    params.tabId && tabs.some(tab => tab.id === params.tabId)
+      ? params.tabId
+      : null;
 
   return (
     <>
